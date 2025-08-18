@@ -42,32 +42,33 @@ function NavContent() {
     );
 }
 
-
 function AppShellMobile({ children }: { children: React.ReactNode }) {
     return (
         <SidebarProvider>
-            <header className="flex h-16 items-center justify-between border-b bg-background px-4 md:px-6">
-                <Link href="/" className="flex items-center gap-2">
-                    <Pill className="h-8 w-8 text-primary" />
-                    <span className="font-headline text-xl font-bold">PillSnap</span>
-                </Link>
-                <Sheet>
-                    <SheetTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                            <Menu />
-                        </Button>
-                    </SheetTrigger>
-                    <SheetContent side="left" className="w-[300px] p-0">
-                        <SheetHeader>
-                          <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-                        </SheetHeader>
-                        <nav className="flex flex-col">
-                            <NavContent />
-                        </nav>
-                    </SheetContent>
-                </Sheet>
-            </header>
-            <main>{children}</main>
+            <div className="flex flex-col h-screen">
+                <header className="flex h-16 items-center justify-between border-b bg-background px-4 shrink-0">
+                    <Link href="/" className="flex items-center gap-2">
+                        <Pill className="h-8 w-8 text-primary" />
+                        <span className="font-headline text-xl font-bold">PillSnap</span>
+                    </Link>
+                    <Sheet>
+                        <SheetTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                                <Menu />
+                            </Button>
+                        </SheetTrigger>
+                        <SheetContent side="left" className="w-[300px] p-0">
+                             <SheetHeader>
+                              <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                            </SheetHeader>
+                            <nav className="flex flex-col">
+                                <NavContent />
+                            </nav>
+                        </SheetContent>
+                    </Sheet>
+                </header>
+                <main className="flex-1 overflow-y-auto">{children}</main>
+            </div>
         </SidebarProvider>
     );
 }
@@ -75,14 +76,18 @@ function AppShellMobile({ children }: { children: React.ReactNode }) {
 function AppShellDesktop({ children }: { children: React.ReactNode }) {
     return (
         <SidebarProvider>
-            <div className="flex">
+            <div className="flex h-screen">
                 <Sidebar>
                     <SidebarHeader />
                     <SidebarContent>
                         <NavContent />
                     </SidebarContent>
                 </Sidebar>
-                <SidebarInset>{children}</SidebarInset>
+                <SidebarInset>
+                    <div className="h-full overflow-y-auto">
+                        {children}
+                    </div>
+                </SidebarInset>
             </div>
         </SidebarProvider>
     );
