@@ -1,111 +1,30 @@
+
 'use client';
 
 import * as React from 'react';
-import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Home, History, Pill, Search, Menu, Loader2 } from 'lucide-react';
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset } from '@/components/ui/sidebar';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { Pill } from 'lucide-react';
 
-function NavContent() {
-    const pathname = usePathname();
-    const navItems = [
-      { href: '/', label: 'Identify', icon: Home, tooltip: 'Identify' },
-    ];
+function Header() {
     return (
-        <>
-            <div className="flex items-center gap-2 p-4">
+        <header className="flex h-16 items-center border-b bg-background px-4 md:px-6 shrink-0">
+            <Link href="/" className="flex items-center gap-2">
                 <Pill className="h-8 w-8 text-primary" />
-                <h1 className="font-headline text-xl font-bold">PillSnap</h1>
-            </div>
-            <div className="relative p-4">
-                <Search className="absolute left-7 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input placeholder="Search medicine..." className="pl-8" />
-            </div>
-            <SidebarMenu>
-                {navItems.map((item) => (
-                    <SidebarMenuItem key={item.href}>
-                        <Link href={item.href} className="w-full">
-                            <SidebarMenuButton isActive={pathname === item.href} tooltip={item.tooltip}>
-                                <item.icon />
-                                <span>{item.label}</span>
-                            </SidebarMenuButton>
-                        </Link>
-                    </SidebarMenuItem>
-                ))}
-            </SidebarMenu>
-        </>
-    );
-}
-
-function AppShellMobile({ children }: { children: React.ReactNode }) {
-    return (
-        <SidebarProvider>
-            <div className="flex flex-col h-screen">
-                <header className="flex h-16 items-center justify-between border-b bg-background px-4 shrink-0">
-                    <Link href="/" className="flex items-center gap-2">
-                        <Pill className="h-8 w-8 text-primary" />
-                        <span className="font-headline text-xl font-bold">PillSnap</span>
-                    </Link>
-                    <Sheet>
-                        <SheetTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                                <Menu />
-                            </Button>
-                        </SheetTrigger>
-                        <SheetContent side="left" className="w-[300px] p-0">
-                             <SheetHeader>
-                              <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-                            </SheetHeader>
-                            <nav className="flex flex-col">
-                                <NavContent />
-                            </nav>
-                        </SheetContent>
-                    </Sheet>
-                </header>
-                <main className="flex-1 overflow-y-auto">{children}</main>
-            </div>
-        </SidebarProvider>
-    );
-}
-
-function AppShellDesktop({ children }: { children: React.ReactNode }) {
-    return (
-        <SidebarProvider>
-            <div className="flex h-screen">
-                <Sidebar>
-                    <SidebarHeader />
-                    <SidebarContent>
-                        <NavContent />
-                    </SidebarContent>
-                </Sidebar>
-                <SidebarInset>
-                    <div className="h-full overflow-y-auto">
-                        {children}
-                    </div>
-                </SidebarInset>
-            </div>
-        </SidebarProvider>
+                <span className="font-headline text-xl font-bold">PillSnap</span>
+            </Link>
+        </header>
     );
 }
 
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const isMobile = useIsMobile();
-
-  if (isMobile === undefined) {
-      return (
-        <div className="flex h-screen items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin" />
-        </div>
-      )
-  }
-
-  const Shell = isMobile ? AppShellMobile : AppShellDesktop;
-
   return (
-    <Shell>{children}</Shell>
+    <div className="flex flex-col h-screen">
+      <Header />
+      <main className="flex-1 overflow-y-auto">
+        <div className="container mx-auto p-4 md:p-8">
+            {children}
+        </div>
+      </main>
+    </div>
   );
 }

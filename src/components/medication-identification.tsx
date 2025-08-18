@@ -1,8 +1,9 @@
+
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import { Camera, Upload, Loader2, RefreshCw, XCircle } from 'lucide-react';
+import { Camera, Upload, Loader2, RefreshCw, XCircle, History } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
@@ -11,7 +12,7 @@ import { useHistory } from '@/hooks/use-history';
 import type { IdentifyMedicationOutput } from '@/ai/flows/identify-medication';
 import { MedicationCard } from './medication-card';
 import type { HistoryItem } from '@/lib/types';
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import Link from 'next/link';
 
 export function MedicationIdentification() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -73,45 +74,53 @@ export function MedicationIdentification() {
   };
 
   const renderIdleState = () => (
-    <Card className="w-full max-w-lg text-center">
-      <CardContent className="p-6 md:p-8">
-        <h2 className="font-headline text-2xl md:text-3xl font-bold">Identify a Pill</h2>
-        <p className="mt-2 text-muted-foreground text-sm md:text-base">
-          Take a photo or upload an image to identify a medication.
-        </p>
+    <div className="flex flex-col items-center">
+      <Card className="w-full max-w-lg text-center">
+        <CardContent className="p-6 md:p-8">
+          <h2 className="font-headline text-2xl md:text-3xl font-bold">Identify a Pill</h2>
+          <p className="mt-2 text-muted-foreground text-sm md:text-base">
+            Take a photo or upload an image to identify a medication.
+          </p>
 
-        <div className="my-6">
-            <div className="w-full aspect-video rounded-md bg-muted flex items-center justify-center">
-                <Camera className="h-16 w-16 text-muted-foreground/50" />
-            </div>
-        </div>
+          <div className="my-6">
+              <div className="w-full aspect-video rounded-md bg-muted flex items-center justify-center">
+                  <Camera className="h-16 w-16 text-muted-foreground/50" />
+              </div>
+          </div>
 
-        <input
-          type="file"
-          accept="image/*"
-          capture="environment"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          className="hidden"
-        />
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Button size="lg" onClick={() => fileInputRef.current?.click()}>
-            <Camera className="mr-2 h-5 w-5" />
-            Take Photo
-          </Button>
-          <Button size="lg" variant="secondary" onClick={() => {
-            const newFileInput = document.createElement('input');
-            newFileInput.type = 'file';
-            newFileInput.accept = 'image/*';
-            newFileInput.onchange = handleFileChange;
-            newFileInput.click();
-          }}>
-            <Upload className="mr-2 h-5 w-5" />
-            Upload
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+          <input
+            type="file"
+            accept="image/*"
+            capture="environment"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            className="hidden"
+          />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <Button size="lg" onClick={() => fileInputRef.current?.click()}>
+              <Camera className="mr-2 h-5 w-5" />
+              Take Photo
+            </Button>
+            <Button size="lg" variant="secondary" onClick={() => {
+              const newFileInput = document.createElement('input');
+              newFileInput.type = 'file';
+              newFileInput.accept = 'image/*';
+              newFileInput.onchange = handleFileChange;
+              newFileInput.click();
+            }}>
+              <Upload className="mr-2 h-5 w-5" />
+              Upload
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+      <Link href="/history" className="mt-6">
+        <Button variant="outline">
+            <History className="mr-2 h-4 w-4" />
+            View Identification History
+        </Button>
+      </Link>
+    </div>
   );
 
   const renderProcessingState = () => (
@@ -158,25 +167,39 @@ export function MedicationIdentification() {
     }
 
     return (
-        <div className="w-full max-w-2xl">
+        <div className="w-full max-w-2xl flex flex-col items-center">
             <MedicationCard medication={historyItem} />
-            <Button onClick={resetAll} className="mt-6 w-full">
-                <RefreshCw className="mr-2 h-4 w-4" />
-                Identify Another Pill
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 mt-6 w-full">
+              <Button onClick={resetAll} className="w-full">
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Identify Another Pill
+              </Button>
+              <Link href="/history" className="w-full">
+                <Button variant="outline" className="w-full">
+                    <History className="mr-2 h-4 w-4" />
+                    View History
+                </Button>
+              </Link>
+            </div>
         </div>
     );
   };
   
-  switch (status) {
-    case 'loading':
-      return renderProcessingState();
-    case 'success':
-      return renderSuccessState();
-    case 'error':
-      return renderErrorState();
-    case 'idle':
-    default:
-      return renderIdleState();
-  }
+  return (
+    <div className="flex w-full justify-center">
+        {(() => {
+            switch (status) {
+                case 'loading':
+                  return renderProcessingState();
+                case 'success':
+                  return renderSuccessState();
+                case 'error':
+                  return renderErrorState();
+                case 'idle':
+                default:
+                  return renderIdleState();
+            }
+        })()}
+    </div>
+  )
 }
