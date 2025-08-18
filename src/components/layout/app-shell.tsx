@@ -14,7 +14,6 @@ function NavContent() {
     const pathname = usePathname();
     const navItems = [
       { href: '/', label: 'Identify', icon: Home, tooltip: 'Identify' },
-      { href: '/history', label: 'History', icon: History, tooltip: 'History' },
     ];
     return (
         <>
