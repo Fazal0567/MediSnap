@@ -46,7 +46,7 @@ function NavContent() {
 function AppShellMobile({ children }: { children: React.ReactNode }) {
     return (
         <div>
-            <header className="flex h-16 items-center justify-between border-b bg-background px-4">
+            <header className="flex h-16 items-center justify-between border-b bg-background px-4 md:px-6">
                 <Link href="/" className="flex items-center gap-2">
                     <Pill className="h-8 w-8 text-primary" />
                     <span className="font-headline text-xl font-bold">PillSnap</span>
@@ -58,8 +58,8 @@ function AppShellMobile({ children }: { children: React.ReactNode }) {
                         </Button>
                     </SheetTrigger>
                     <SheetContent side="left" className="w-[300px] p-0">
-                        <SheetHeader className="p-4">
-                            <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                        <SheetHeader>
+                          <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                         </SheetHeader>
                         <nav className="flex flex-col">
                             <NavContent />

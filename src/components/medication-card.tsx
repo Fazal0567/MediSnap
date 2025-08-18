@@ -9,7 +9,7 @@ interface MedicationCardProps {
 
 export function MedicationCard({ medication }: MedicationCardProps) {
   return (
-    <Card className="w-full overflow-hidden shadow-sm transition-shadow hover:shadow-md">
+    <Card className="w-full overflow-hidden shadow-sm transition-shadow hover:shadow-md flex flex-col">
       <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-start p-4 md:p-6">
         {medication.photoDataUri && (
           <Image
@@ -30,7 +30,7 @@ export function MedicationCard({ medication }: MedicationCardProps) {
           </CardDescription>
         </div>
       </CardHeader>
-      <CardContent className="grid gap-4 px-4 md:px-6 pb-4 md:pb-6 pt-0">
+      <CardContent className="grid gap-4 px-4 md:px-6 pb-4 md:pb-6 pt-0 flex-1">
         <div className="grid gap-1">
           <h3 className="flex items-center gap-2 text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-wider">
             <NotepadText className="h-4 w-4" /> Uses
