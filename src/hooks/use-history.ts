@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -51,9 +52,17 @@ export function useHistory() {
     [saveHistory]
   );
 
+  const removeFromHistory = useCallback((id: string) => {
+    setHistory(currentHistory => {
+        const newHistory = currentHistory.filter(item => item.id !== id);
+        saveHistory(newHistory);
+        return newHistory;
+    });
+  }, [saveHistory]);
+
   const clearHistory = useCallback(() => {
     saveHistory([]);
   }, [saveHistory]);
 
-  return { history, addToHistory, clearHistory, isLoaded };
+  return { history, addToHistory, clearHistory, removeFromHistory, isLoaded };
 }
