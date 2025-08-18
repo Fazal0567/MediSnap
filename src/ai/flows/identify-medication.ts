@@ -23,6 +23,7 @@ export type IdentifyMedicationInput = z.infer<typeof IdentifyMedicationInputSche
 const IdentifyMedicationOutputSchema = z.object({
   medicationName: z.string().describe('The name of the identified medication.'),
   uses: z.string().describe('The uses of the medication.'),
+  usesInHindi: z.string().describe('The uses of the medication, translated into Hindi.'),
   dosage: z.string().describe('The typical dosage of the medication.'),
   sideEffects: z.string().describe('Potential side effects of the medication.'),
 });
@@ -43,6 +44,7 @@ const prompt = ai.definePrompt({
   Respond with:
   - The name of the medication.
   - The uses of the medication.
+  - The uses of the medication, translated into Hindi.
   - The typical dosage of the medication.
   - Potential side effects of the medication.`,
 });

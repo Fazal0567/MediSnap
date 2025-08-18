@@ -4,7 +4,7 @@
 import { useHistory } from '@/hooks/use-history';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Trash2, Inbox, ArrowLeft, Pill, NotepadText, AlertTriangle, TestTube2 } from 'lucide-react';
+import { Trash2, Inbox, ArrowLeft, NotepadText, AlertTriangle, TestTube2 } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -116,6 +116,7 @@ export default function HistoryPage() {
                                     <NotepadText className="h-4 w-4" /> Uses
                                 </h3>
                                 <p className="pl-6 text-sm md:text-base">{item.uses}</p>
+                                {item.usesInHindi && <p className="pl-6 text-sm md:text-base">{item.usesInHindi}</p>}
                                 </div>
                                 <div className="grid gap-1">
                                 <h3 className="flex items-center gap-2 text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-wider">

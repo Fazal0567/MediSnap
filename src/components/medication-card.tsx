@@ -36,6 +36,7 @@ export function MedicationCard({ medication }: MedicationCardProps) {
             <NotepadText className="h-4 w-4" /> Uses
           </h3>
           <p className="pl-6 text-sm md:text-base">{medication.uses}</p>
+          {medication.usesInHindi && <p className="pl-6 text-sm md:text-base">{medication.usesInHindi}</p>}
         </div>
         <div className="grid gap-1">
           <h3 className="flex items-center gap-2 text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-wider">
