@@ -45,7 +45,7 @@ function NavContent() {
 
 function AppShellMobile({ children }: { children: React.ReactNode }) {
     return (
-        <div>
+        <SidebarProvider>
             <header className="flex h-16 items-center justify-between border-b bg-background px-4">
                 <Link href="/" className="flex items-center gap-2">
                     <Pill className="h-8 w-8 text-primary" />
@@ -65,7 +65,7 @@ function AppShellMobile({ children }: { children: React.ReactNode }) {
                 </Sheet>
             </header>
             <main>{children}</main>
-        </div>
+        </SidebarProvider>
     );
 }
 
