@@ -6,6 +6,7 @@ import type { HistoryItem } from '@/lib/types';
 import type { IdentifyMedicationOutput } from '@/ai/flows/identify-medication';
 
 const HISTORY_KEY = 'pillSnapHistory';
+const HISTORY_LIMIT = 50;
 
 export function useHistory() {
   const [history, setHistory] = useState<HistoryItem[]>([]);
@@ -26,7 +27,7 @@ export function useHistory() {
 
   const saveHistory = useCallback((newHistory: HistoryItem[]) => {
     try {
-      const limitedHistory = newHistory.slice(0, 50); // Limit history size
+      const limitedHistory = newHistory.slice(0, HISTORY_LIMIT); 
       setHistory(limitedHistory);
       localStorage.setItem(HISTORY_KEY, JSON.stringify(limitedHistory));
     } catch (error) {
@@ -36,7 +37,6 @@ export function useHistory() {
 
   const addToHistory = useCallback(
     (item: IdentifyMedicationOutput, photoDataUri: string) => {
-      // Access state with a function to get the latest value
       setHistory((currentHistory) => {
         const newItem: HistoryItem = {
           ...item,
@@ -46,7 +46,7 @@ export function useHistory() {
         };
         const newHistory = [newItem, ...currentHistory];
         saveHistory(newHistory);
-        return newHistory;
+        return newHistory.slice(0, HISTORY_LIMIT);
       });
     },
     [saveHistory]
