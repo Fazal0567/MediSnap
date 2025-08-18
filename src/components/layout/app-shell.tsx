@@ -3,11 +3,11 @@
 import * as React from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Home, History, Pill, Search, Menu } from 'lucide-react';
+import { Home, History, Pill, Search, Menu, Loader2 } from 'lucide-react';
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset } from '@/components/ui/sidebar';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 function NavContent() {
@@ -58,6 +58,9 @@ function AppShellMobile({ children }: { children: React.ReactNode }) {
                         </Button>
                     </SheetTrigger>
                     <SheetContent side="left" className="w-[300px] p-0">
+                        <SheetHeader className="p-4">
+                            <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                        </SheetHeader>
                         <nav className="flex flex-col">
                             <NavContent />
                         </nav>
