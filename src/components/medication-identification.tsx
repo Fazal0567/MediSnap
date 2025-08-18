@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { Camera, Upload, Loader2, RefreshCw, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -18,40 +18,10 @@ export function MedicationIdentification() {
   const [result, setResult] = useState<IdentifyMedicationOutput | null>(null);
   const [photoDataUri, setPhotoDataUri] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const { toast } = useToast();
   const { addToHistory } = useHistory();
-
-  useEffect(() => {
-    const getCameraPermission = async () => {
-      if (!navigator.mediaDevices?.getUserMedia) {
-        setHasCameraPermission(false);
-        return;
-      }
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        setHasCameraPermission(true);
-
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      } catch (error) {
-        console.error('Error accessing camera:', error);
-        setHasCameraPermission(false);
-        toast({
-          variant: 'destructive',
-          title: 'Camera Access Denied',
-          description: 'Please enable camera permissions in your browser settings to use this feature.',
-        });
-      }
-    };
-
-    getCameraPermission();
-  }, [toast]);
-
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -111,15 +81,9 @@ export function MedicationIdentification() {
         </p>
 
         <div className="my-6">
-          <video ref={videoRef} className="w-full aspect-video rounded-md bg-muted" autoPlay muted playsInline />
-          {hasCameraPermission === false && (
-            <Alert variant="destructive" className="mt-2 text-left">
-              <AlertTitle>Camera Access Required</AlertTitle>
-              <AlertDescription>
-                Please allow camera access to use this feature.
-              </AlertDescription>
-            </Alert>
-          )}
+            <div className="w-full aspect-video rounded-md bg-muted flex items-center justify-center">
+                <Camera className="h-16 w-16 text-muted-foreground/50" />
+            </div>
         </div>
 
         <input
@@ -131,7 +95,7 @@ export function MedicationIdentification() {
           className="hidden"
         />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Button size="lg" onClick={() => fileInputRef.current?.click()} disabled={!hasCameraPermission}>
+          <Button size="lg" onClick={() => fileInputRef.current?.click()}>
             <Camera className="mr-2 h-5 w-5" />
             Take Photo
           </Button>
