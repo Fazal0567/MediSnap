@@ -45,7 +45,7 @@ function NavContent() {
 
 function AppShellMobile({ children }: { children: React.ReactNode }) {
     return (
-        <div>
+        <SidebarProvider>
             <header className="flex h-16 items-center justify-between border-b bg-background px-4 md:px-6">
                 <Link href="/" className="flex items-center gap-2">
                     <Pill className="h-8 w-8 text-primary" />
@@ -68,21 +68,23 @@ function AppShellMobile({ children }: { children: React.ReactNode }) {
                 </Sheet>
             </header>
             <main>{children}</main>
-        </div>
+        </SidebarProvider>
     );
 }
 
 function AppShellDesktop({ children }: { children: React.ReactNode }) {
     return (
-        <div>
-            <Sidebar>
-                <SidebarHeader />
-                <SidebarContent>
-                    <NavContent />
-                </SidebarContent>
-            </Sidebar>
-            <SidebarInset>{children}</SidebarInset>
-        </div>
+        <SidebarProvider>
+            <div className="flex">
+                <Sidebar>
+                    <SidebarHeader />
+                    <SidebarContent>
+                        <NavContent />
+                    </SidebarContent>
+                </Sidebar>
+                <SidebarInset>{children}</SidebarInset>
+            </div>
+        </SidebarProvider>
     );
 }
 
@@ -100,8 +102,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const Shell = isMobile ? AppShellMobile : AppShellDesktop;
 
   return (
-    <SidebarProvider>
-        <Shell>{children}</Shell>
-    </SidebarProvider>
+    <Shell>{children}</Shell>
   );
 }
