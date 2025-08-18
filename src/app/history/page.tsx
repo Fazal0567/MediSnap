@@ -21,7 +21,7 @@ export default function HistoryPage() {
   const { history, clearHistory, isLoaded } = useHistory();
 
   const renderSkeletons = () => (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
       {Array.from({ length: 4 }).map((_, i) => (
         <div key={i} className="flex flex-col space-y-3">
           <Skeleton className="h-[125px] w-full rounded-xl" />
@@ -36,12 +36,12 @@ export default function HistoryPage() {
 
   return (
     <div className="container mx-auto max-w-5xl p-4 md:p-8">
-      <div className="mb-8 flex items-center justify-between">
-        <h1 className="font-headline text-3xl font-bold">Identification History</h1>
+      <div className="mb-6 md:mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <h1 className="font-headline text-2xl md:text-3xl font-bold">Identification History</h1>
         {history.length > 0 && (
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive" size="sm">
+              <Button variant="destructive" size="sm" className="w-full md:w-auto">
                 <Trash2 className="mr-2 h-4 w-4" />
                 Clear History
               </Button>
@@ -73,7 +73,7 @@ export default function HistoryPage() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {history.map((item) => (
             <MedicationCard key={item.id} medication={item} />
           ))}

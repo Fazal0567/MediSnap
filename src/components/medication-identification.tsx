@@ -77,8 +77,8 @@ export function MedicationIdentification() {
 
   const renderIdleState = () => (
     <Card className="w-full max-w-md text-center">
-      <CardContent className="p-8">
-        <h2 className="font-headline text-2xl font-bold">Identify a Pill</h2>
+      <CardContent className="p-6 md:p-8">
+        <h2 className="font-headline text-2xl md:text-3xl font-bold">Identify a Pill</h2>
         <p className="mt-2 text-muted-foreground">
           Take a photo or upload an image to identify a medication.
         </p>

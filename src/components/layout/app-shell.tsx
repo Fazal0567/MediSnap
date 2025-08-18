@@ -13,8 +13,8 @@ import { useIsMobile } from '@/hooks/use-mobile';
 function NavContent() {
     const pathname = usePathname();
     const navItems = [
-      { href: '/', label: 'Identify', icon: Home },
-      { href: '/history', label: 'History', icon: History },
+      { href: '/', label: 'Identify', icon: Home, tooltip: 'Identify' },
+      { href: '/history', label: 'History', icon: History, tooltip: 'History' },
     ];
     return (
         <>
@@ -30,7 +30,7 @@ function NavContent() {
                 {navItems.map((item) => (
                     <SidebarMenuItem key={item.href}>
                         <Link href={item.href} className="w-full">
-                            <SidebarMenuButton isActive={pathname === item.href}>
+                            <SidebarMenuButton isActive={pathname === item.href} tooltip={item.tooltip}>
                                 <item.icon />
                                 <span>{item.label}</span>
                             </SidebarMenuButton>
@@ -45,7 +45,7 @@ function NavContent() {
 
 function AppShellMobile({ children }: { children: React.ReactNode }) {
     return (
-        <SidebarProvider>
+        <div>
             <header className="flex h-16 items-center justify-between border-b bg-background px-4">
                 <Link href="/" className="flex items-center gap-2">
                     <Pill className="h-8 w-8 text-primary" />
@@ -65,13 +65,13 @@ function AppShellMobile({ children }: { children: React.ReactNode }) {
                 </Sheet>
             </header>
             <main>{children}</main>
-        </SidebarProvider>
+        </div>
     );
 }
 
 function AppShellDesktop({ children }: { children: React.ReactNode }) {
     return (
-        <SidebarProvider>
+        <div>
             <Sidebar>
                 <SidebarHeader />
                 <SidebarContent>
@@ -79,7 +79,7 @@ function AppShellDesktop({ children }: { children: React.ReactNode }) {
                 </SidebarContent>
             </Sidebar>
             <SidebarInset>{children}</SidebarInset>
-        </SidebarProvider>
+        </div>
     );
 }
 
@@ -87,12 +87,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const isMobile = useIsMobile();
 
   if (isMobile === undefined) {
-      return null;
+      return (
+        <div className="flex h-screen items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      )
   }
 
-  if (isMobile) {
-    return <AppShellMobile>{children}</AppShellMobile>;
-  }
+  const Shell = isMobile ? AppShellMobile : AppShellDesktop;
 
-  return <AppShellDesktop>{children}</AppShellDesktop>;
+  return (
+    <SidebarProvider>
+        <Shell>{children}</Shell>
+    </SidebarProvider>
+  );
 }
