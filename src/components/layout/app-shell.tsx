@@ -10,7 +10,7 @@ function Header() {
         <header className="flex h-16 items-center border-b bg-background px-4 md:px-6 shrink-0">
             <Link href="/" className="flex items-center gap-2">
                 <Pill className="h-8 w-8 text-primary" />
-                <span className="font-headline text-xl font-bold">PillSnap</span>
+                <span className="font-headline text-xl font-bold">MediSnap</span>
             </Link>
         </header>
     );

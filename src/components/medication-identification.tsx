@@ -77,7 +77,7 @@ export function MedicationIdentification() {
     <div className="flex flex-col items-center">
       <Card className="w-full max-w-lg text-center">
         <CardContent className="p-6 md:p-8">
-          <h2 className="font-headline text-2xl md:text-3xl font-bold">Identify a Pill</h2>
+          <h2 className="font-headline text-2xl md:text-3xl font-bold">Identify a Medicine</h2>
           <p className="mt-2 text-muted-foreground text-sm md:text-base">
             Take a photo or upload an image to identify a medication.
           </p>
