@@ -37,28 +37,24 @@ export function useHistory() {
 
   const addToHistory = useCallback(
     (item: IdentifyMedicationOutput, photoDataUri: string) => {
-      setHistory((currentHistory) => {
-        const newItem: HistoryItem = {
+      const newHistory = [
+        {
           ...item,
           id: new Date().toISOString() + Math.random().toString(),
           timestamp: new Date().toISOString(),
           photoDataUri,
-        };
-        const newHistory = [newItem, ...currentHistory];
-        saveHistory(newHistory);
-        return newHistory.slice(0, HISTORY_LIMIT);
-      });
+        },
+        ...history,
+      ];
+      saveHistory(newHistory);
     },
-    [saveHistory]
+    [history, saveHistory]
   );
 
   const removeFromHistory = useCallback((id: string) => {
-    setHistory(currentHistory => {
-        const newHistory = currentHistory.filter(item => item.id !== id);
-        saveHistory(newHistory);
-        return newHistory;
-    });
-  }, [saveHistory]);
+    const newHistory = history.filter(item => item.id !== id);
+    saveHistory(newHistory);
+  }, [history, saveHistory]);
 
   const clearHistory = useCallback(() => {
     saveHistory([]);
