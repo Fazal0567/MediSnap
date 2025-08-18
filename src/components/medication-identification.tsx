@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import { Camera, Upload, Loader2, RefreshCw, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,16 +11,47 @@ import { useHistory } from '@/hooks/use-history';
 import type { IdentifyMedicationOutput } from '@/ai/flows/identify-medication';
 import { MedicationCard } from './medication-card';
 import type { HistoryItem } from '@/lib/types';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
 export function MedicationIdentification() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [result, setResult] = useState<IdentifyMedicationOutput | null>(null);
   const [photoDataUri, setPhotoDataUri] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const { toast } = useToast();
   const { addToHistory } = useHistory();
+
+  useEffect(() => {
+    const getCameraPermission = async () => {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        setHasCameraPermission(false);
+        return;
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        setHasCameraPermission(true);
+
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      } catch (error) {
+        console.error('Error accessing camera:', error);
+        setHasCameraPermission(false);
+        toast({
+          variant: 'destructive',
+          title: 'Camera Access Denied',
+          description: 'Please enable camera permissions in your browser settings to use this feature.',
+        });
+      }
+    };
+
+    getCameraPermission();
+  }, [toast]);
+
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -49,10 +80,6 @@ export function MedicationIdentification() {
       setResult(response);
       addToHistory(response, dataUri);
       setStatus('success');
-      toast({
-        title: "Success!",
-        description: `Identified as ${response.medicationName}.`,
-      });
     } catch (e) {
       const err = e as Error;
       setError(err.message);
@@ -76,12 +103,25 @@ export function MedicationIdentification() {
   };
 
   const renderIdleState = () => (
-    <Card className="w-full max-w-md text-center">
+    <Card className="w-full max-w-lg text-center">
       <CardContent className="p-6 md:p-8">
         <h2 className="font-headline text-2xl md:text-3xl font-bold">Identify a Pill</h2>
         <p className="mt-2 text-muted-foreground">
           Take a photo or upload an image to identify a medication.
         </p>
+
+        <div className="my-6">
+          <video ref={videoRef} className="w-full aspect-video rounded-md bg-muted" autoPlay muted playsInline />
+          {hasCameraPermission === false && (
+            <Alert variant="destructive" className="mt-2 text-left">
+              <AlertTitle>Camera Access Required</AlertTitle>
+              <AlertDescription>
+                Please allow camera access to use this feature.
+              </AlertDescription>
+            </Alert>
+          )}
+        </div>
+
         <input
           type="file"
           accept="image/*"
@@ -90,8 +130,8 @@ export function MedicationIdentification() {
           onChange={handleFileChange}
           className="hidden"
         />
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Button size="lg" onClick={() => fileInputRef.current?.click()}>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Button size="lg" onClick={() => fileInputRef.current?.click()} disabled={!hasCameraPermission}>
             <Camera className="mr-2 h-5 w-5" />
             Take Photo
           </Button>
@@ -112,7 +152,7 @@ export function MedicationIdentification() {
 
   const renderProcessingState = () => (
     <Card className="w-full max-w-md">
-      <CardContent className="flex flex-col items-center justify-center p-8">
+      <CardContent className="flex flex-col items-center justify-center p-6 md:p-8">
         {photoDataUri && (
           <Image
             src={photoDataUri}
@@ -131,7 +171,7 @@ export function MedicationIdentification() {
   
   const renderErrorState = () => (
     <Card className="w-full max-w-md">
-        <CardContent className="flex flex-col items-center justify-center p-8 text-center">
+        <CardContent className="flex flex-col items-center justify-center p-6 md:p-8 text-center">
             <XCircle className="h-12 w-12 text-destructive" />
             <h2 className="mt-4 font-headline text-xl font-semibold">Identification Failed</h2>
             <p className="mt-2 text-sm text-muted-foreground">{error}</p>
