@@ -1,5 +1,7 @@
 
-import {nextGenkit} from '@genkit-ai/next';
+import nextGenkit from '@genkit-ai/next';
+// Make sure to import the flow file to register it with Genkit
 import '@/ai/flows/identify-medication';
 
-export const {GET, POST} = nextGenkit();
+// Use the nextGenkit handler to expose your Genkit flows as Next.js API routes
+export { nextGenkit as GET, nextGenkit as POST };
