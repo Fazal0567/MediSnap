@@ -4,7 +4,7 @@ import { useHistory } from '@/hooks/use-history';
 import { MedicationCard } from '@/components/medication-card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { HistoryX, Inbox } from 'lucide-react';
+import { Trash2, Inbox } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -42,7 +42,7 @@ export default function HistoryPage() {
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="destructive" size="sm">
-                <HistoryX className="mr-2 h-4 w-4" />
+                <Trash2 className="mr-2 h-4 w-4" />
                 Clear History
               </Button>
             </AlertDialogTrigger>
